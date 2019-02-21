@@ -1,0 +1,49 @@
+excel操作
+import xlrd,xlwt
+from xlutils.copy import copy
+读数据：
+	打开文件
+	data=xlrd.open_workbook('xls')
+	打开工作簿
+	table=data.sheet_by_name('sheet_name')
+	获取行数，列数
+	nrows = table.nrows
+	ncols = table.ncols
+	table.cell_value(i,j)
+新建写入数据
+	workbook = xlwt.Workbook()
+	sheet = workbook.add_sheet('sheet_name')
+	sheet.write(i,j,'')
+	book.save(path)
+表格追加内容
+	workbook = xlrd.open_workbook(path)
+	打开工作簿
+	table=workbook.sheet_by_name('sheet_name')
+	new_workbook = copy(workbook)
+	new_workbook.write(i,j,'')
+	new_workbook.save(path)
+	
+ddt
+1,pip install ddt
+2,import ddt
+3,测试类前加@ddt.ddt
+	用例前加@ddt.data(列表)
+	
+Jquery：
+$(CSS).val()
+
+JS
+document.getElementById().value=''
+document.QueryCssSeletorAll().value=''
+聚焦滑动：
+target = self.find_element(locator)   self.driver.execute_script("arguments[0].scrollIntoView();", target)
+
+滚动条操作：
+self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)“)
+
+上传文件：
+
+下拉框操作
+
+alert操作
+

@@ -1,0 +1,248 @@
+app类别：原生app 混合app web'app
+
+appium自动化环境：
+jdk+sdk+
+
+sdk：
+Tools：SDK Tools+SDK Platform-tools+SDK build-tools
+API
+Extras
+环境变量：
+ANDROID_HOME：SDK路径
+build-tools&tools&platform-tools路径 
+
+adb命令：
+adb version
+adb connect 虚拟机名字
+adb devices
+adb install apk   (-r:覆盖安装，-s：指定设备）
+	例：adb -s 设备名 install -r  apk
+adb  shell
+cd /data/app/
+adb uninstall apk   (-k:保留缓存）
+adb shell pm list package 查看安装的包名
+文件从PC传到设备：
+	adb push local remote
+		例：adb push C:\1.txt /sdcard
+文件从设备到PC“
+    adb pull remote local
+		例：adb pull /sdcard/1.txt C:\\
+adb服务开启关闭：
+	adb kill-server
+	adb start-server
+解除端口占用:
+	1.netstat -ano | findstr 'port'
+	2.taskkill -f -pid PID
+	
+获取package activity
+aapt dump badging apk
+
+元素布局：
+frameLayout：堆叠
+LinearLayout：垂直&水平 顺序排序：
+relative Layout：相对位置排序
+AbsuluteLayout:绝对位置排序
+TableLayerout：表格排序
+Textview：显示文字
+ImageView：显示图片
+
+
+monkey命令：adb 命令启动monkey
+关闭monkey：
+adb shell ps
+adb shell kill pid
+
+monekey命令格式：
+adb shell monkey 参数  事件数·
+·················
+事件：触摸，手势，缩放，轨迹，屏幕旋转，基本导航，主要导航，系统按键，启动activity，键盘，其他时间
+触摸：--pct-touch 
+手势：--pct-motion
+缩放：--pct-pinchzoom
+轨迹：--pct-trackball
+屏幕旋转：--pct-rotation
+基本导航：--pct-nav
+主要导航：--pct-majornav
+系统按键：--pct-syskeys
+启动activity：--pct-appswitch
+键盘操作：--pct-flip
+其他事件：--pct-anyevent
+
+参数：常规类参数，事件类参数，约束类参数，调试类参数
+常规类参数：
+	帮助类参数：
+		monkey -h
+	日志级别：
+		adb shell monkey -v -v -v 1000
+事件类参数：
+	执行指定脚本：
+		adb shell monkey -f dir num_event
+	伪随机数生成种子值：
+		adb shell monkey -s seed num_event
+	设置间隔：
+		adb shell monkey --throttle seconds
+		例：adb shell monkey --throttle 2000 5 随机产生5个事件，每个事件间隔2秒
+	调整事件百分比：
+		--pct-event
+约束类事件：
+	包约束：
+		-p:指定包名
+			adb shell monkey -p com.tal.kaoyan -p com.tencent.mm 500
+	activity约束：
+		-c
+调试类参数：
+	程序崩溃后继续发送事件：
+		adb shell monkey --ignore-crashes 忽略程序崩溃
+		adb shell monkey --ignore-timeouts 忽略响应超时
+		adb shell monkey --ignore-security-exceptions 忽略程序权限错误
+
+例：
+adb shell monkey -p com.tal.kaoyan
+--pct-touch 40 --pct-motion 25
+--pct-appswitch 10
+--pct-rotation 5 
+-s 1666 --throttle 400
+--ignore-crashes
+--ignore-timeouts
+-v -v 200
+
+monkey脚本：
+Tape（x,t,tapDuration)点击
+UserWait(sleeptime)等待
+DispatchPress()按键
+RotateScreen()旋转屏幕
+DispatchString(input)输入字符串
+DispatchFlip(True&False)打开键盘
+PressAndHold(x,y,time)长按
+Drag(x1,y1,x2,y2)拖拽
+PinchZoom(x1s,y1s,x1n,y1n,x2s,y2s,x2n,y2n)缩放
+LongPress()长按两秒
+DeviceWakeUp()唤醒屏幕
+PowerLog(power_log_type, test_case_status)： 模拟电池电量信息。
+WriteLog()： 将电池信息写入sd卡。
+RunCmd(cmd)： 运行shell命令。
+DispatchPointer(downtime,eventTime,action,x,yxpressure,size,metastate,xPrecision,yPrecision,device,edgeFlags)： 向指定位置，发送单个手势。
+DispatchPointer(downtime,eventTime,action,x,yxpressure,size,metastate,xPrecision,yPrecision,device,edgeFilags)： 发送按键消息。
+LaunchInstrumentation(test_name,runner_name)： 运行一个instrumentation测试用例。
+DispatchTrackball： 模拟发送轨迹球事件。
+ProfileWait： 等待5秒。
+StartCaptureFramerate()： 获取帧率。
+EndCaptureFramerate(input)： 结束获取帧率。
+
+日志保存：
+	保存到PC：adb shell monkey -v -v 100 >d:\log.txt
+	保存到手机：1.adb shell
+				2.monkey -v 100 >log.txt
+	标准流1 错误流2
+
+
+appium:支持多种语言，同时支持安卓和iOS
+desired_capability
+platformName:
+platformVersion:
+deviceName:
+appPackage:
+appActivity:
+noReset:
+
+Toast内容获取
+1.cnpm install appium-uiautomator2-driver
+2.desired_caps['automationName']='uiautomator2'
+3.message = ‘//[@text='  ']’
+4.WebDriverWaite(driver,5).until(lambda x, x.find_element_by_xpath(message)
+
+截图：
+1.save_screenshot()
+2.get_screenshot_as_file(self,filename)
+
+H5元素定位：context切换
+1.下载安装电脑和手机版谷歌浏览器，版本一致
+2.保证appium安装目录下的node_mudles\appium-chromedriver\chromedriver\win内的浏览器驱动与浏览器版本对应
+3.翻墙
+4.web View调试模式检查：Chrome：//inspect/#devices
+5.开启webVIew：WebView.setWebContentsDebuggingEnbled(true)
+6.a.driver.contexts
+  b.driver.switch_to.context('WEBVIEW_com.***')
+  c.driver.switch_to.context('NATIVE_APP')返回原生界面
+
+滑动操作：
+1.swipe（x1,y1,x2,y2)
+
+连续滑动：
+1.from appium.webdriver.common.touch_action import TouchAction
+2.
+	press()
+	longpress()
+	tap()
+	move_to()
+	Wait()
+	release()
+	perform()
+例： TouchAction(driver).press(x=243,y=381).wait(2000)
+						.move_to(x=455,y=390).wait(1000)
+						.move_to(x=643,y=584).wait(1000)
+						.move_to(x=647,y=784).wait(1000)
+						.release().perform()	
+
+缩放：
+1.from appium.webdriver.common.multi_action import MultiAciton
+  from appium.webdriver.common.touch_action import TouchAction
+2.
+	a1 = TouchAction(driver)
+	a1.press(el1).move_to(el2).release()
+
+	a2 = TouchAction(driver)
+	a2.press(el2).move_to(el1).release()
+
+	MultiAction(driver).add(a1, a2).perform()
+	
+yaml:大小写敏感，缩进表示层级关系，不能用tab缩进
+数据类型：
+	纯量
+	数组：-
+	对象：：
+yaml转字典	
+1.import yaml
+2.with open('yaml文件‘，’r') as f1
+3.data = yaml.load(f1)
+元素转yaml：
+yaml.dump(元素)
+
+日志：
+级别：DEBUG，INFO，WARNING，ERROR，CRITICAL
+日志格式：时间+模块+函数+具体信息&时间+事件
+日治位置：
+1.import logging
+2
+
+
+
+
+
+
+
+
+
+		
+		
+	
+	
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
